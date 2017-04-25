@@ -48,8 +48,8 @@ def get_current_status(intent, session):
     reprompt_text=None
     url="http://www.akshaybaweja.com/iitd-hack.php?request=get"
     res=requests.get(url)
-    print(res)
-    speech_output="Your unpaid trips are 430 kilometers and outstanding amount is 5 rupees 30 paisa. Do you want to pay now?"
+    res=res.json()
+    speech_output="Your unpaid trips are "+res["unpaid_distance"]+" kilometers and outstanding amount is "+res["outstanding_amount"]+" rupees. Do you want to pay now?"
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
@@ -58,6 +58,8 @@ def pay_now(intent,session):
     session_attributes = {}
     should_end_session = True
     reprompt_text=None
+    url="http://www.akshaybaweja.com/iitd-hack.php?request=pay"
+    requests.get(url)
     speech_output="Your payment is processed successfully. Thank You for contributing. Have a nice day"
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
